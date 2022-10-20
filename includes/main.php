@@ -135,5 +135,109 @@
 
     }
 
+    // ELIMINAR PRODUCTO
+    if(isset($_POST['eliminarProducto'])){
+
+        $producto = $_POST['id_producto'];
+        $lista = $_POST['id_lista'];
+        $sql = "DELETE FROM `productosEYSL` WHERE id = $producto";
+
+        $resultado = mysqli_query($conn, $sql);
+
+        if(!$resultado){
+            die("Consulta fallida");
+        }
+
+        $_SESSION['mensaje'] = 'Producto eliminada correctamente';
+        $_SESSION['tipoMensaje'] = 'success';
+
+        header("Location: productos.php?lista=$lista");
+
+    }
+
+    // CREAR PRODUCTO
+    if(isset($_POST['crearProducto'])){
+        
+        $producto = $_POST["producto"];
+        $descripcion = $_POST['descripcion'];
+        $tipo = $_POST['tipo'];
+        $precio = $_POST['precio'];
+        $cantidad = $_POST['cantidad'];
+        $lista = $_POST['id_lista'];
+
+        $sql = "INSERT INTO `productosEYSL`(`producto`,`tipo`,`descripcion`,`precio`,`cantidad`,`lista`) VALUES ('$producto', '$tipo', '$descripcion', '$precio', $cantidad, $lista)";
+                
+        $resultado = mysqli_query($conn,$sql);
+
+        if(!$resultado){
+            die("No se ha podido realizar el insert<br>");
+        }
+
+        $_SESSION['mensaje'] = 'Producto guardado correctamente';
+        $_SESSION['tipoMensaje'] = 'success';
+
+        header("Location: productos.php?lista=$lista");
+
+    }
+
+    // EDITAR PRODUCTO
+    if(isset($_POST['editarProducto'])){
+        $id_producto = $_POST['id_producto'];
+        $producto = $_POST["producto"];
+        $descripcion = $_POST['descripcion'];
+        $precio = $_POST['precio'];
+        $cantidad = $_POST['cantidad'];
+        $lista = $_POST['id_lista'];
+    
+        $sql = "UPDATE `productosEYSL` SET producto = '$producto', descripcion = '$descripcion', cantidad = $cantidad, precio = $precio WHERE id = $id_producto";
+        mysqli_query($conn, $sql);
+        
+        $_SESSION['mensaje'] = 'Producto actualizado correctamente';
+        $_SESSION['tipoMensaje'] = 'success';
+        
+        header("Location: productos.php?lista=$lista");
+
+    }
+
+
+    // AÑADIR FAVORITO
+    if(isset($_POST['nuevoFavorito'])){
+
+        $usuario = $_SESSION["id_usuario"];
+        $lista = $_POST['id_lista'];
+
+        $sql = "INSERT INTO `favoritosEYSL`(`usuario`,`lista`) VALUES ('$usuario', '$lista')";
+                
+        $resultado = mysqli_query($conn,$sql);
+
+        if(!$resultado){
+            die("No se ha podido realizar el insert<br>");
+        }
+
+        $_SESSION['mensaje'] = 'Lista añadida a favoritos correctamente';
+        $_SESSION['tipoMensaje'] = 'success';
+
+        header("Location: listas.php");
+    }
+
+    // ELIMINAR FAVORITO
+    if(isset($_POST['eliminarFavorito'])){
+        $usuario = $_SESSION["id_usuario"];
+        $lista = $_POST['id_lista'];
+
+        $sql = "DELETE FROM `favoritosEYSL` WHERE usuario = $usuario AND lista = $lista";
+                
+        $resultado = mysqli_query($conn,$sql);
+
+        if(!$resultado){
+            die("No se ha podido realizar el delete<br>");
+        }
+
+        $_SESSION['mensaje'] = 'Lista eliminada de favoritos correctamente';
+        $_SESSION['tipoMensaje'] = 'success';
+
+        header("Location: listas.php");
+    }
+
 
 ?>

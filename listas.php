@@ -15,10 +15,17 @@ if(isset($_SESSION['admin']) && (isset($_GET['filtro']) && $_GET['filtro'] == "m
 
 } else if(isset($_SESSION['id_usuario']) && !isset($_SESSION['admin']) && (isset($_GET['filtro']) && $_GET['filtro'] == "favoritos")){
     // FAVORITOS
+    $id_usuario = $_SESSION['id_usuario'];
+
+    if(isset($_POST['filtrarListas']) && $_POST['search'] != null){
+        $sql = "SELECT * FROM `listasEYSL` WHERE id IN (SELECT `lista` FROM `favoritosEYSL` WHERE usuario LIKE '$id_usuario') AND (`descripcion` LIKE '%$busqueda%' OR `nombre` LIKE '%$busqueda%') ORDER BY `id` DESC";
+    } else {
+        $sql = "SELECT * FROM `listasEYSL` WHERE id IN (SELECT `lista` FROM `favoritosEYSL` WHERE usuario LIKE '$id_usuario') ORDER BY `id` DESC";
+    }
+    
 } else {
 
     // VER TODAS
-
     if(isset($_POST['filtrarListas']) && $_POST['search'] != null){
         $busqueda = $_POST['search'];
         $sql = "SELECT * FROM `listasEYSL` WHERE (`descripcion` LIKE '%$busqueda%' OR `nombre` LIKE '%$busqueda%') ORDER BY `id` DESC";
@@ -70,7 +77,22 @@ if(isset($_SESSION['admin']) && (isset($_GET['filtro']) && $_GET['filtro'] == "m
         
         $listas = mysqli_query($conn, $sql);
 
-        while($lista = mysqli_fetch_array($listas)){?>
+        while($lista = mysqli_fetch_array($listas)){
+
+            $favorito = false;
+
+            if(isset($_SESSION['id_usuario']) && !isset($_SESSION['admin'])){
+                $id_usuario = $_SESSION['id_usuario'];
+                $id_lista = $lista['id'];
+                $sql = "SELECT * FROM `favoritosEYSL` WHERE usuario like '$id_usuario' AND `lista` like '$id_lista'";
+
+                $resultado = mysqli_fetch_array(mysqli_query($conn, $sql));
+
+                if($resultado){
+                    $favorito = true;
+                }
+            }
+    ?>
 
     <!-- ELEMENTO LISTA -->
     <div class="d-flex">
@@ -95,17 +117,25 @@ if(isset($_SESSION['admin']) && (isset($_GET['filtro']) && $_GET['filtro'] == "m
         </div>
         <div class="ms-2">
 
-            <a href="./lista.php?lista=<?= $lista['id'] ?>" type="button" class="shadow-sm mx-2 px-4 py-3 btn btn-warning text-white">
+            <a href="./productos.php?lista=<?= $lista['id'] ?>" type="button" class="shadow-sm mx-2 px-4 py-3 btn btn-warning text-white">
                 <b><i class="bi bi-eye-fill"></i></b>
             </a>
 
             <?php if(isset($_SESSION['id_usuario']) && !isset($_SESSION['admin'])){ ?>
                 <form method="POST" class="d-inline">
-                    <button class="shadow-sm me-2 px-4 py-3 btn btn-outline-danger" name="nuevoFavorito">
-                        <i class="bi bi-heart "></i>
-                    </button>
+                    <?php if($favorito) { ?>
+                        <input type="hidden" value="<?= $lista['id'] ?>" name="id_lista">
+                        <button class="shadow-sm me-2 px-4 py-3 btn btn-danger" name="eliminarFavorito">
+                            <i class="bi bi-heart "></i>
+                        </button>
+                    <?php } else { ?>
+                        <input type="hidden" value="<?= $lista['id'] ?>" name="id_lista">
+                        <button class="shadow-sm me-2 px-4 py-3 btn btn-outline-danger" name="nuevoFavorito">
+                            <i class="bi bi-heart "></i>
+                        </button>
+                    <?php } ?> 
                 </form>
-            <?php } if(isset($_SESSION['admin'])){ ?>
+            <?php } if(isset($_SESSION['admin']) && (isset($_GET['filtro']) && $_GET['filtro'] == "mis-listas")){ ?>
                 <a href="./guardar-lista.php?lista=<?= $lista['id'] ?>" class="shadow-sm me-2 px-4 py-3 btn btn-outline-primary" name="editarLista">
                     <i class="bi bi-pencil-square"></i>
                 </a>
