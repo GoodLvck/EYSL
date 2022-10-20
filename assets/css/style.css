@@ -1,0 +1,11 @@
+.required-indicator{
+    color: blue;
+}
+
+.accordion, .accordion-header {
+    border-radius: 15px;
+}
+
+.accordion {
+    border-radius: 0 0 15px 15px;
+}
