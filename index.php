@@ -13,8 +13,11 @@
             </p>
             <br>
             <div class="d-grid gap-2 d-md-flex justify-content-md-start mb-4 mb-lg-3">
-                <a href="./guardar-lista.php" style="color:#fff;"
-                    class="btn btn-warning btn-lg px-4 me-md-2 fw-bold">Añadir nueva lista</a>
+                <?php if(isset($_SESSION['admin'])){ ?>
+                    <a href="./guardar-lista.php" style="color:#fff;" class="btn btn-warning btn-lg px-4 me-md-2 fw-bold">Añadir lista</a>
+                <?php } else { ?>
+                    <a href="./listas.php?filtro=favoritos" style="color:#fff;" class="btn btn-warning btn-lg px-4 me-md-2 fw-bold">Ver favoritos</a>
+                <?php }?>
                 <a href="./listas.php" class="btn btn-outline-success btn-lg px-4">Ver listas</a>
             </div>
             <br>

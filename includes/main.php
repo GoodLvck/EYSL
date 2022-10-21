@@ -90,7 +90,7 @@
         $_SESSION['mensaje'] = 'Lista eliminada correctamente';
         $_SESSION['tipoMensaje'] = 'success';
 
-        header("Location: listas.php");
+        header("Location: listas.php?filtro=mis-listas");
 
     }
 
@@ -113,7 +113,12 @@
         $_SESSION['mensaje'] = 'Lista creada correctamente';
         $_SESSION['tipoMensaje'] = 'success';
 
-        header("Location: listas.php");
+
+        if(isset($_POST['mis-listas'])){
+            header("Location: listas.php?filtro=mis-listas");
+        } else {
+            header("Location: listas.php");
+        }
 
     }
 
@@ -216,14 +221,16 @@
 
         $_SESSION['mensaje'] = 'Lista añadida a favoritos correctamente';
         $_SESSION['tipoMensaje'] = 'success';
-
-        header("Location: listas.php");
     }
 
     // ELIMINAR FAVORITO
     if(isset($_POST['eliminarFavorito'])){
         $usuario = $_SESSION["id_usuario"];
         $lista = $_POST['id_lista'];
+
+        if(isset($_POST['favoritos'])){
+            $favoritos = true;
+        }
 
         $sql = "DELETE FROM `favoritosEYSL` WHERE usuario = $usuario AND lista = $lista";
                 
@@ -236,7 +243,11 @@
         $_SESSION['mensaje'] = 'Lista eliminada de favoritos correctamente';
         $_SESSION['tipoMensaje'] = 'success';
 
-        header("Location: listas.php");
+        if($favoritos){
+            header("Location: listas.php?filtro=favoritos");
+        } else {
+            header("Location: listas.php");
+        }
     }
 
 

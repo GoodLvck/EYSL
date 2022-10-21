@@ -1,4 +1,10 @@
-<?php include("includes/header.php") ?>
+<?php 
+    include("includes/header.php");
+
+    if(!isset($_SESSION['id_usuario'])){
+        header("Location: login.php");
+    }
+?>
 
 <?php 
 
@@ -78,7 +84,7 @@
         <?php if(isset($_SESSION['admin'])){ ?>
             <a href="guardar-producto.php?lista=<?= $lista?>" class="col btn btn-primary text-white">Añadir producto</a>
         <?php } ?>
-        <a href="listas.php" class="col btn btn-outline-secondary">Volver</a>
+        <a href="listas.php<?= (isset($_GET['filtro']) && ($_GET['filtro'] == 'mis-listas')) ? '?filtro=mis-listas' : '' ?><?= (isset($_GET['filtro']) && ($_GET['filtro'] == 'favoritos')) ? '?filtro=favoritos' : '' ?>" class="col btn btn-outline-secondary">Volver</a>
     </div>
     <!-- FIN AÑADIR PRODUCTO -->
 
@@ -117,7 +123,7 @@
         </div>
         <?php if(isset($_SESSION['admin']) && $_SESSION['id_usuario'] == $usuarioLista){ ?>
             <div class="ms-2">
-                <a href="./editar-producto.php?producto=<?= $producto['id'] ?>" type="button" class="shadow-sm mx-2 px-4 py-3 btn btn-outline-primary">
+                <a href="./guardar-producto.php?lista=<?= $lista ?>&producto=<?= $producto['id'] ?>" type="button" class="shadow-sm mx-2 px-4 py-3 btn btn-outline-primary">
                     <i class="bi bi-pencil-square"></i>
                 </a>
                 <form method="POST" class="d-inline">
@@ -142,14 +148,6 @@
 
 </div>
 <!-- FIN CONTENIDO -->
-
-<?php 
-
-    function filtrar(){
-
-    }
-
-?>
 
 <?php include("includes/footer.php") ?>
                                        

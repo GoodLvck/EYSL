@@ -3,23 +3,42 @@
 
     $accion = "";
 
-    // Crear producto -> id lista
-    // Editar producto -> id producto
+    if(!isset($_SESSION['admin'])){
+        header("Location: listas.php");
+    }
 
     if(isset($_GET['lista'])){
+
         $lista = $_GET['lista'];
-        $accion = "Crear";
-    } else if(isset($_GET['producto'])){
-        $id_producto = $_GET['producto'];
-        $accion = "Editar";
+        $usuarioLista = mysqli_fetch_column(mysqli_query($conn, "SELECT `usuario` FROM `listasEYSL` WHERE `id` like '$lista'"));
+        
+        if($usuarioLista != $_SESSION['id_usuario']){
+            header("Location: listas.php");
+        } else {
 
-        $sql = "SELECT * FROM `productosEYSL` WHERE id = $id_producto"; 
+            if(isset($_GET['producto'])){
+                
+                $id_producto = $_GET['producto'];
+                $accion = "Editar";
+        
+                $sql = "SELECT * FROM `productosEYSL` WHERE id = $id_producto"; 
+        
+                $resultado = mysqli_query($conn, $sql);
+        
+                if(mysqli_num_rows($resultado) == 1){
+                    $producto = mysqli_fetch_array($resultado);
+                } else {
+                    header("Location: listas.php");
+                }
+        
+            } else {
+                $accion = "Crear";
+            }
 
-        $resultado = mysqli_query($conn, $sql);
-
-        if(mysqli_num_rows($resultado) == 1){
-            $producto = mysqli_fetch_array($resultado);
-        }
+        }  
+        
+    } else {
+        header("Location: listas.php");
     }
 
 ?>

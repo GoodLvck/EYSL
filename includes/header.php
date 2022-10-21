@@ -36,7 +36,7 @@
 
                         <?php if(isset($_SESSION['admin'])){?>
                             <li><a class="dropdown-item" href="./listas.php?filtro=mis-listas">Mis listas</a></li>
-                            <li><a class="dropdown-item" href="./crear-lista.php">Nueva lista</a></li>
+                            <li><a class="dropdown-item" href="./guardar-lista.php">Nueva lista</a></li>
                         <?php } else { ?>
                             <li><a class="dropdown-item" href="./listas.php?filtro=favoritos">Favoritos</a></li>
                         <?php }?>

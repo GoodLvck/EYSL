@@ -25,6 +25,15 @@ if(isset($_SESSION['admin']) && (isset($_GET['filtro']) && $_GET['filtro'] == "m
     
 } else {
 
+    if(isset($_GET['filtro'])){
+
+        if($_GET['filtro'] == 'favoritos' && !isset($_SESSION['id_usuario'])){
+            header("Location: login.php");
+        } else {
+            header("Location: listas.php");
+        }
+    }
+
     // VER TODAS
     if(isset($_POST['filtrarListas']) && $_POST['search'] != null){
         $busqueda = $_POST['search'];
@@ -68,7 +77,7 @@ if(isset($_SESSION['admin']) && (isset($_GET['filtro']) && $_GET['filtro'] == "m
     <!-- AÑADIR LISTA -->
     <?php if(isset($_SESSION['admin'])){ ?>
         <div class="my-5">
-            <a href="crear-lista.php" class="col btn btn-primary text-white">Crear lista</a>
+            <a href="./guardar-lista.php<?= (isset($_GET['filtro']) && $_GET['filtro'] == 'mis-listas') ? '?filtro=mis-listas' : '' ?>" class="col btn btn-primary text-white">Crear lista</a>
         </div>
     <!-- FIN AÑADIR LISTA -->
 
@@ -117,7 +126,7 @@ if(isset($_SESSION['admin']) && (isset($_GET['filtro']) && $_GET['filtro'] == "m
         </div>
         <div class="ms-2">
 
-            <a href="./productos.php?lista=<?= $lista['id'] ?>" type="button" class="shadow-sm mx-2 px-4 py-3 btn btn-warning text-white">
+            <a href="./productos.php?lista=<?= $lista['id']?><?= (isset($_GET['filtro']) && ($_GET['filtro'] == 'mis-listas')) ? '&filtro=mis-listas' : '' ?><?= (isset($_GET['filtro']) && ($_GET['filtro'] == 'favoritos')) ? '&filtro=favoritos' : '' ?>" type="button" class="shadow-sm mx-2 px-4 py-3 btn btn-warning text-white">
                 <b><i class="bi bi-eye-fill"></i></b>
             </a>
 
@@ -125,6 +134,11 @@ if(isset($_SESSION['admin']) && (isset($_GET['filtro']) && $_GET['filtro'] == "m
                 <form method="POST" class="d-inline">
                     <?php if($favorito) { ?>
                         <input type="hidden" value="<?= $lista['id'] ?>" name="id_lista">
+
+                        <?php if(isset($_GET['filtro']) && $_GET['filtro'] == "favoritos"){ ?>
+                            <input type="hidden" value="true" name="favoritos">
+                        <?php } ?>
+
                         <button class="shadow-sm me-2 px-4 py-3 btn btn-danger" name="eliminarFavorito">
                             <i class="bi bi-heart "></i>
                         </button>

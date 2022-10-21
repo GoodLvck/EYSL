@@ -11,7 +11,7 @@
 			<ul class="nav col-md-4 justify-content-end">
 				<li class="nav-item"><a href="../index.php" class="nav-link px-2 text-muted">Inicio</a></li>
 				<li class="nav-item"><a href="../mis-listas.php" class="nav-link px-2 text-muted">Ver listas</a></li>
-				<li class="nav-item"><a href="../crear-lista.php" class="nav-link px-2 text-muted">Añadir lista</a></li>
+				<li class="nav-item"><a href="../guardar-lista.php" class="nav-link px-2 text-muted">Añadir lista</a></li>
                 <?php if(isset($_SESSION['id_usuario'])){ ?>
                     <li class="nav-item"><form method="POST"><button class="btn btn-link nav-link px-2 text-muted" name="cerrarSesion">Cerrar sesión</button></form></li>
                 <?php } else { ?>
