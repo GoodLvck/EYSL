@@ -14,19 +14,33 @@
         if($password === $password2){
             $password = password_hash($_POST['password'], PASSWORD_BCRYPT);
 
-            $sql = "INSERT INTO `usuariosEYSL` (`usuario`, `nombre`, `apellidos`, `email`, `contraseña`, `admin`) VALUES ('$usuario', '$nombre', '$apellidos', '$email', '$password', '0')";
-            
+            $sql = "SELECT * FROM `usuariosEYSL` WHERE `usuario` LIKE '$usuario' ";
             $resultado = mysqli_query($conn,$sql);
 
-            // Iniciar sesión
-            $sql = "SELECT * FROM `usuariosEYSL` WHERE `usuario` like '$usuario'";
-            $resultado = mysqli_fetch_array(mysqli_query($conn,$sql));
-            $_SESSION['id_usuario'] = $resultado['id'];
-            $_SESSION['mensaje'] = 'Se ha registrado correctamente';
-            $_SESSION['tipoMensaje'] = 'success';
-            $_SESSION['paginaMensaje'] = 'index.php';
+            if(mysqli_num_rows($resultado) == 1){
+                $_SESSION['mensaje'] = "El nombre de usuario '$usuario' pertenece a una cuenta existente";
+                $_SESSION['tipoMensaje'] = 'warning';
+                $_SESSION['paginaMensaje'] = 'registro.php';
 
-            header("Location: index.php");
+            } else {
+                $sql = "INSERT INTO `usuariosEYSL` (`usuario`, `nombre`, `apellidos`, `email`, `contraseña`, `admin`) VALUES ('$usuario', '$nombre', '$apellidos', '$email', '$password', '0')";
+            
+                $resultado = mysqli_query($conn,$sql);
+
+                // Iniciar sesión
+                $sql = "SELECT * FROM `usuariosEYSL` WHERE `usuario` like '$usuario'";
+                $resultado = mysqli_fetch_array(mysqli_query($conn,$sql));
+                $_SESSION['id_usuario'] = $resultado['id'];
+                $_SESSION['mensaje'] = 'Se ha registrado correctamente';
+                $_SESSION['tipoMensaje'] = 'success';
+                $_SESSION['paginaMensaje'] = 'index.php';
+                $_SESSION['usuario'] = $usuario;
+
+                header("Location: index.php");
+            }
+
+
+            
         } else {
             $_SESSION['mensaje'] = 'Las contraseñas no coinciden';
             $_SESSION['tipoMensaje'] = 'danger';      
@@ -52,6 +66,7 @@
                 $_SESSION['mensaje'] = 'Se ha iniciado sesión correctamente';
                 $_SESSION['tipoMensaje'] = 'success';
                 $_SESSION['paginaMensaje'] = 'index.php';
+                $_SESSION['usuario'] = $usuario;
 
                 if($resultado['admin'] == 1){
                     $_SESSION['admin'] = true;
