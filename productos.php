@@ -2,6 +2,9 @@
     include("includes/header.php");
 
     if(!isset($_SESSION['id_usuario'])){
+        $_SESSION['mensaje'] = 'Inicia sesión para poder ver todo el contenido';
+        $_SESSION['tipoMensaje'] = 'warning';
+        $_SESSION['paginaMensaje'] = 'login.php';
         header("Location: login.php");
     }
 ?>

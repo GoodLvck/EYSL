@@ -28,6 +28,9 @@ if(isset($_SESSION['admin']) && (isset($_GET['filtro']) && $_GET['filtro'] == "m
     if(isset($_GET['filtro'])){
 
         if($_GET['filtro'] == 'favoritos' && !isset($_SESSION['id_usuario'])){
+            $_SESSION['mensaje'] = 'Inicia sesión para poder acceder a tus favoritos';
+            $_SESSION['tipoMensaje'] = 'warning';
+            $_SESSION['paginaMensaje'] = 'login.php';
             header("Location: login.php");
         } else {
             header("Location: listas.php");
@@ -150,9 +153,11 @@ if(isset($_SESSION['admin']) && (isset($_GET['filtro']) && $_GET['filtro'] == "m
                     <?php } ?> 
                 </form>
             <?php } if(isset($_SESSION['admin']) && (isset($_GET['filtro']) && $_GET['filtro'] == "mis-listas")){ ?>
-                <a href="./guardar-lista.php?lista=<?= $lista['id'] ?>" class="shadow-sm me-2 px-4 py-3 btn btn-outline-primary" name="editarLista">
-                    <i class="bi bi-pencil-square"></i>
-                </a>
+                <form method="POST" class="d-inline" action="./guardar-lista.php?lista=<?= $lista['id'] ?>">
+                    <button type="submit" class="shadow-sm me-2 px-4 py-3 btn btn-outline-primary">
+                        <i class="bi bi-pencil-square"></i>
+                    </button>
+                </form>
                 <form method="POST" class="d-inline">
                     <input type="hidden" value="<?= $lista['id'] ?>" name="id_lista">
                     <button type="submit" class="shadow-sm px-4 py-3 btn btn-outline-danger" name="eliminarLista">

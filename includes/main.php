@@ -18,12 +18,19 @@
             
             $resultado = mysqli_query($conn,$sql);
 
+            // Iniciar sesión
+            $sql = "SELECT * FROM `usuariosEYSL` WHERE `usuario` like '$usuario'";
+            $resultado = mysqli_fetch_array(mysqli_query($conn,$sql));
+            $_SESSION['id_usuario'] = $resultado['id'];
+            $_SESSION['mensaje'] = 'Se ha registrado correctamente';
+            $_SESSION['tipoMensaje'] = 'success';
+            $_SESSION['paginaMensaje'] = 'index.php';
+
             header("Location: index.php");
         } else {
             $_SESSION['mensaje'] = 'Las contraseñas no coinciden';
-            $_SESSION['tipoMensaje'] = 'danger';
-            
-            header("Location: registro.php");
+            $_SESSION['tipoMensaje'] = 'danger';      
+            $_SESSION['paginaMensaje'] = 'registro.php';      
         }
     }
 
@@ -36,7 +43,7 @@
         
         $resultado = mysqli_query($conn,$sql);
 
-        if($resultado){
+        if(mysqli_num_rows($resultado) == 1){
             $resultado = mysqli_fetch_array($resultado);
             $goodPassword = password_verify($_POST['password'], $resultado['contraseña']);
 
@@ -44,6 +51,7 @@
                 $_SESSION['id_usuario'] = $resultado['id'];
                 $_SESSION['mensaje'] = 'Se ha iniciado sesión correctamente';
                 $_SESSION['tipoMensaje'] = 'success';
+                $_SESSION['paginaMensaje'] = 'index.php';
 
                 if($resultado['admin'] == 1){
                     $_SESSION['admin'] = true;
@@ -53,15 +61,11 @@
             } else {
                 $_SESSION['mensaje'] = 'La contraseña no es correcta para este usuario';
                 $_SESSION['tipoMensaje'] = 'danger';
-                
-                header("Location: login.php");
             }
 
         } else {
             $_SESSION['mensaje'] = 'No existe un usuario con estas credenciales';
             $_SESSION['tipoMensaje'] = 'danger';
-
-            header("Location: login.php");
         }
     }
 
@@ -70,8 +74,15 @@
     if(isset($_POST['cerrarSesion'])){
         session_unset();
         session_destroy();
+
+        session_start();
+        $_SESSION['mensaje'] = 'Se ha cerrado sesión correctamente';
+        $_SESSION['tipoMensaje'] = 'success';
+        $_SESSION['paginaMensaje'] = 'index.php';
     
-        header("Location: index.php");
+        if(basename($_SERVER['PHP_SELF']) != 'index.php'){
+            header("Location: index.php");
+        }
     }
 
 
@@ -89,8 +100,7 @@
 
         $_SESSION['mensaje'] = 'Lista eliminada correctamente';
         $_SESSION['tipoMensaje'] = 'success';
-
-        header("Location: listas.php?filtro=mis-listas");
+        $_SESSION['paginaMensaje'] = 'listas.php';
 
     }
 
@@ -112,13 +122,9 @@
 
         $_SESSION['mensaje'] = 'Lista creada correctamente';
         $_SESSION['tipoMensaje'] = 'success';
+        $_SESSION['paginaMensaje'] = 'listas.php';
 
-
-        if(isset($_POST['mis-listas'])){
-            header("Location: listas.php?filtro=mis-listas");
-        } else {
-            header("Location: listas.php");
-        }
+        header("Location: listas.php?filtro=mis-listas");
 
     }
 
@@ -135,8 +141,9 @@
         
         $_SESSION['mensaje'] = 'Lista actualizada correctamente';
         $_SESSION['tipoMensaje'] = 'success';
-        
-        header("Location: listas.php");
+        $_SESSION['paginaMensaje'] = 'listas.php';
+
+        header("Location: listas.php?filtro=mis-listas");
 
     }
 
@@ -153,10 +160,9 @@
             die("Consulta fallida");
         }
 
-        $_SESSION['mensaje'] = 'Producto eliminada correctamente';
+        $_SESSION['mensaje'] = 'Producto eliminado correctamente';
         $_SESSION['tipoMensaje'] = 'success';
-
-        header("Location: productos.php?lista=$lista");
+        $_SESSION['paginaMensaje'] = 'productos.php';
 
     }
 
@@ -180,6 +186,7 @@
 
         $_SESSION['mensaje'] = 'Producto guardado correctamente';
         $_SESSION['tipoMensaje'] = 'success';
+        $_SESSION['paginaMensaje'] = 'productos.php';
 
         header("Location: productos.php?lista=$lista");
 
@@ -199,7 +206,8 @@
         
         $_SESSION['mensaje'] = 'Producto actualizado correctamente';
         $_SESSION['tipoMensaje'] = 'success';
-        
+        $_SESSION['paginaMensaje'] = 'productos.php';
+
         header("Location: productos.php?lista=$lista");
 
     }
@@ -221,6 +229,8 @@
 
         $_SESSION['mensaje'] = 'Lista añadida a favoritos correctamente';
         $_SESSION['tipoMensaje'] = 'success';
+        $_SESSION['paginaMensaje'] = 'listas.php';
+
     }
 
     // ELIMINAR FAVORITO
@@ -242,12 +252,7 @@
 
         $_SESSION['mensaje'] = 'Lista eliminada de favoritos correctamente';
         $_SESSION['tipoMensaje'] = 'success';
-
-        if($favoritos){
-            header("Location: listas.php?filtro=favoritos");
-        } else {
-            header("Location: listas.php");
-        }
+        $_SESSION['paginaMensaje'] = 'listas.php';
     }
 
 

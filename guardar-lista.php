@@ -2,6 +2,9 @@
     include("includes/header.php");
 
     if(!isset($_SESSION['admin'])){
+        $_SESSION['mensaje'] = 'Acceso denegado';
+        $_SESSION['tipoMensaje'] = 'danger';
+        $_SESSION['paginaMensaje'] = 'listas.php';
         header("Location: listas.php");
     }
 
@@ -16,6 +19,9 @@
         }
 
         if($lista['usuario'] != $_SESSION['id_usuario']){
+            $_SESSION['mensaje'] = 'Acceso denegado';
+            $_SESSION['tipoMensaje'] = 'danger';
+            $_SESSION['paginaMensaje'] = 'listas.php';
             header("Location: listas.php");
         }
     
@@ -54,8 +60,6 @@
 
                 <?php if(isset($_GET['lista'])){ ?>
                     <input type="hidden" value="<?= $_GET['lista'] ?>" name="id_lista">
-                <?php } else if(isset($_GET['filtro']) && $_GET['filtro'] == 'mis-listas'){ ?>
-                    <input type="hidden" value="mis-listas" name="mis-listas">
                 <?php } ?>
 
                 <button type="submit" name="<?= isset($_GET['lista']) ? 'editarLista' : 'crearLista' ?>" class="w-100 btn btn-lg btn-primary"><?= isset($_GET['lista']) ? 'Editar' : 'Crear' ?></button>

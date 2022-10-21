@@ -4,6 +4,9 @@
     $accion = "";
 
     if(!isset($_SESSION['admin'])){
+        $_SESSION['mensaje'] = 'Acceso denegado';
+        $_SESSION['tipoMensaje'] = 'danger';
+        $_SESSION['paginaMensaje'] = 'listas.php';
         header("Location: listas.php");
     }
 
@@ -13,6 +16,9 @@
         $usuarioLista = mysqli_fetch_column(mysqli_query($conn, "SELECT `usuario` FROM `listasEYSL` WHERE `id` like '$lista'"));
         
         if($usuarioLista != $_SESSION['id_usuario']){
+            $_SESSION['mensaje'] = 'Acceso denegado';
+            $_SESSION['tipoMensaje'] = 'danger';
+            $_SESSION['paginaMensaje'] = 'listas.php';
             header("Location: listas.php");
         } else {
 
@@ -28,6 +34,9 @@
                 if(mysqli_num_rows($resultado) == 1){
                     $producto = mysqli_fetch_array($resultado);
                 } else {
+                    $_SESSION['mensaje'] = 'El producto seleccionado no existe';
+                    $_SESSION['tipoMensaje'] = 'danger';
+                    $_SESSION['paginaMensaje'] = 'listas.php';
                     header("Location: listas.php");
                 }
         

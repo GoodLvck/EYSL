@@ -10,14 +10,20 @@
 
 			<ul class="nav col-md-4 justify-content-end">
 				<li class="nav-item"><a href="../index.php" class="nav-link px-2 text-muted">Inicio</a></li>
-				<li class="nav-item"><a href="../mis-listas.php" class="nav-link px-2 text-muted">Ver listas</a></li>
-				<li class="nav-item"><a href="../guardar-lista.php" class="nav-link px-2 text-muted">Añadir lista</a></li>
+				<li class="nav-item"><a href="../listas.php" class="nav-link px-2 text-muted">Ver listas</a></li>
                 <?php if(isset($_SESSION['id_usuario'])){ ?>
+                    <?php if(isset($_SESSION['admin'])){?>
+                        <li class="nav-item"><a class="nav-link px-2 text-muted" href="./listas.php?filtro=mis-listas">Mis listas</a></li>
+                        <li class="nav-item"><a class="nav-link px-2 text-muted" href="./guardar-lista.php">Nueva lista</a></li>
+                    <?php } else { ?>
+                        <li class="nav-item"><a class="nav-link px-2 text-muted" href="./listas.php?filtro=favoritos">Favoritos</a></li>
+                    <?php }?>
                     <li class="nav-item"><form method="POST"><button class="btn btn-link nav-link px-2 text-muted" name="cerrarSesion">Cerrar sesión</button></form></li>
                 <?php } else { ?>
                     <li class="nav-item"><a href="./login.php" class="nav-link px-2 text-muted">Login</a></li>
                     <li class="nav-item"><a href="./registro.php" class="nav-link px-2 text-muted">Registro</a></li>
                 <?php } ?>
+
 			</ul>
 
 		</footer>

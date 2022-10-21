@@ -57,9 +57,9 @@
         </div>
     </header>
 
-    <?php if(isset($_SESSION['mensaje'])){ ?>
+    <?php if(isset($_SESSION['mensaje']) && ($_SESSION['paginaMensaje'] == basename($_SERVER['PHP_SELF']))){ ?>
         <div class="m-3 alert alert-<?= $_SESSION['tipoMensaje'] ?> alert-dismissible fade show" role="alert">
             <?= $_SESSION['mensaje'] ?>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
-    <?php unset($_SESSION['mensaje']);} ?>
+    <?php unset($_SESSION['mensaje']); } ?>
