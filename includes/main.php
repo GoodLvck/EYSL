@@ -12,15 +12,17 @@
         $password2 = $_POST['password2'];
         $valido = false;
 
-        if(preg_match("/[^a-zA-Z0-9_]/", $usuario)){
-            $_SESSION['mensaje'] = 'El nombre de usuario solo puede contener letras, números y guiones bajos';
-        } else if(preg_match("/[^a-zA-Z]/", $nombre)){
+        if(preg_match("/[^a-zA-Z0-9_]/", $usuario) || strlen($usuario) < 2 ){
+            $_SESSION['mensaje'] = 'El nombre de usuario solo puede contener letras, números y guiones bajos y debe tener una longitud mínima de 2 carácteres';
+        } else if(preg_match("/[^a-zA-Z]/", $nombre) || strlen($nombre) < 2 ){
             $_SESSION['mensaje'] = 'El nombre solo puede contener letras y debe tener una longitud mínima de 2 carácteres';
-        } else if(preg_match("/[^a-zA-Z]/", $apellido)){
+        } else if(preg_match("/[^a-zA-Z]/", $apellidos) || strlen($apellidos) < 2 ){
             $_SESSION['mensaje'] = 'El apellido solo puede contener letras y debe tener una longitud mínima de 2 carácteres';
-        } else if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
+        } else if(!filter_var($email, FILTER_VALIDATE_EMAIL) || strlen($email) < 1){
             $_SESSION['mensaje'] = 'El correo electrónico no cumple con la estructura correcta (ejemplo@ejemplo.ejemplo)';
-        } else if($password != $password2){
+        } else if(strlen($password) < 8 ){
+            $_SESSION['mensaje'] = 'La contraseña debe tener, al menos, 8 carácteres';
+        } else if($password != $password2 || strlen($password2) < 1){
             $_SESSION['mensaje'] = 'Las contraseñas no coinciden';
         } else {
             $sql = "SELECT * FROM `usuariosEYSL` WHERE `usuario` LIKE '$usuario' ";

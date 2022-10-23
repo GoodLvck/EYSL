@@ -18,41 +18,36 @@
         <div class="col-md-10 mx-auto col-lg-5">
             <form method="POST" class="p-4 p-md-5 border rounded-3 bg-light" >
                 <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="usuario" minlength="2" name="usuario" placeholder="usuario"
-                        required />
+                    <input type="text" class="form-control" id="usuario" name="usuario" placeholder="usuario" required />
                     <label for="usuario">Usuario <span class="required-indicator">*</span>
                     </label>
                 </div>
                 <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="nombre" minlength="2" name="nombre" placeholder="nombre"
-                        required>
+                    <input type="text" class="form-control" id="nombre" name="nombre" placeholder="nombre" required />
                     <label for="nombre">
                         Nombre <span class="required-indicator">*</span>
                     </label>
                 </div>
                 <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="apellidos" minlength="2" name="apellidos"
-                        placeholder="apellidos" required>
+                    <input type="text" class="form-control" id="apellidos" name="apellidos" placeholder="apellidos" required />
                     <label for="apellidos">
                         Apellidos <span class="required-indicator">*</span>
                     </label>
                 </div>
                 <div class="form-floating mb-3">
-                    <input type="email" class="form-control" id="email" name="email" placeholder="email" required>
+                    <input type="text" class="form-control" id="email" name="email" placeholder="email" required />
                     <label for="email">
                         Email <span class="required-indicator">*</span>
                     </label>
                 </div>
                 <div class="form-floating mb-3">
-                    <input type="password" class="form-control" id="password" minlength="8" name="password"
-                        placeholder="contraseña" required>
+                    <input type="password" class="form-control" id="password" name="password" placeholder="contraseña" required />
                     <label for="password">
                         Contraseña <span class="required-indicator">*</span>
                     </label>
                 </div>
                 <div class="form-floating mb-3">
-                    <input type="password" class="form-control" id="password2" minlength="8" name="password2"
-                        placeholder="contraseña" required>
+                    <input type="password" class="form-control" id="password2" name="password2" placeholder="contraseña" required />
                     <label for="password2">
                         Confirmar contraseña <span class="required-indicator">*</span>
                     </label>
@@ -60,7 +55,7 @@
 
                 <div class="checkbox mb-3">
                     <label>
-                        <input type="checkbox" required> He leído y acepto los términos y condiciones.
+                        <input type="checkbox" required /> He leído y acepto los términos y condiciones.
                     </label>
                 </div>
                 <button name="crearUsuario" class="w-100 btn btn-lg btn-primary" type="submit" value="create">Crear cuenta</button>
