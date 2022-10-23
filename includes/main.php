@@ -10,24 +10,42 @@
         $email = $_POST['email'];
         $password = $_POST['password'];
         $password2 = $_POST['password2'];
+        $valido = false;
 
-        if($password === $password2){
-            $password = password_hash($_POST['password'], PASSWORD_BCRYPT);
-
+        if(preg_match("/[^a-zA-Z0-9_]/", $usuario)){
+            $_SESSION['mensaje'] = 'El nombre de usuario solo puede contener letras, números y guiones bajos';
+        } else if(preg_match("/[^a-zA-Z]/", $nombre)){
+            $_SESSION['mensaje'] = 'El nombre solo puede contener letras y debe tener una longitud mínima de 2 carácteres';
+        } else if(preg_match("/[^a-zA-Z]/", $apellido)){
+            $_SESSION['mensaje'] = 'El apellido solo puede contener letras y debe tener una longitud mínima de 2 carácteres';
+        } else if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
+            $_SESSION['mensaje'] = 'El correo electrónico no cumple con la estructura correcta (ejemplo@ejemplo.ejemplo)';
+        } else if($password != $password2){
+            $_SESSION['mensaje'] = 'Las contraseñas no coinciden';
+        } else {
             $sql = "SELECT * FROM `usuariosEYSL` WHERE `usuario` LIKE '$usuario' ";
             $resultado = mysqli_query($conn,$sql);
 
             if(mysqli_num_rows($resultado) == 1){
                 $_SESSION['mensaje'] = "El nombre de usuario '$usuario' pertenece a una cuenta existente";
-                $_SESSION['tipoMensaje'] = 'warning';
-                $_SESSION['paginaMensaje'] = 'registro.php';
-
             } else {
-                $sql = "INSERT INTO `usuariosEYSL` (`usuario`, `nombre`, `apellidos`, `email`, `contraseña`, `admin`) VALUES ('$usuario', '$nombre', '$apellidos', '$email', '$password', '0')";
-            
-                $resultado = mysqli_query($conn,$sql);
+                $valido = true;
+            }
 
-                // Iniciar sesión
+        }
+
+        if(!$valido){
+            $_SESSION['tipoMensaje'] = 'warning';      
+            $_SESSION['paginaMensaje'] = 'registro.php'; 
+        } else {
+            $password = password_hash($_POST['password'], PASSWORD_BCRYPT);
+
+            $sql = "INSERT INTO `usuariosEYSL` (`usuario`, `nombre`, `apellidos`, `email`, `contraseña`, `admin`) VALUES ('$usuario', '$nombre', '$apellidos', '$email', '$password', '0')";
+            
+            $resultado = mysqli_query($conn,$sql);
+
+            // Iniciar sesión
+            if($resultado){
                 $sql = "SELECT * FROM `usuariosEYSL` WHERE `usuario` like '$usuario'";
                 $resultado = mysqli_fetch_array(mysqli_query($conn,$sql));
                 $_SESSION['id_usuario'] = $resultado['id'];
@@ -38,14 +56,9 @@
 
                 header("Location: index.php");
             }
-
-
-            
-        } else {
-            $_SESSION['mensaje'] = 'Las contraseñas no coinciden';
-            $_SESSION['tipoMensaje'] = 'danger';      
-            $_SESSION['paginaMensaje'] = 'registro.php';      
+     
         }
+
     }
 
 
